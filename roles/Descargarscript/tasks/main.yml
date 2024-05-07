@@ -7,9 +7,8 @@
           SET ECHO OFF;
           SET MARKUP HTML OFF;
           SET COLSEP ',';
-          SPOOL /home/oracle/temp_file.sql;
           SELECT contenido FROM SCRIPTS WHERE nombre = 'script_ejemplo2.sql';
-          EXIT;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
+          EXIT;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} | sed -e 's/;/;\n/g' > /tmp/temp_file.sql
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"

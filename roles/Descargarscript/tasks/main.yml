@@ -10,7 +10,7 @@
               SPOOL /tmp/temp_file.sql;
               SELECT contenido FROM SCRIPTS WHERE nombre = 'script_ejemplo2.sql';
               SPOOL OFF;
-              EXIT;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@{{ oracle_host }}:{{ oracle_port }}/{{ oracle_database }}
+              EXIT;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"

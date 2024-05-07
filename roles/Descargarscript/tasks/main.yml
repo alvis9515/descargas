@@ -1,18 +1,16 @@
 ---
 - name: Ejecutar script SQL usando SQL*Plus
   shell: |
-    " $ORACLE_HOME/bin/sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} <<EOF
-        SET PAGESIZE 0
-        SET FEEDBACK OFF
-        SET HEADING OFF
-        SET ECHO OFF
-        SET MARKUP HTML OFF
-        SET COLSEP ","
-        SPOOL /home/oracle/temp_file.sql
-        SELECT contenido FROM SCRIPTS WHERE nombre = 'script_ejemplo2.sql';
-        SPOOL OFF
-        EXIT
-    EOF"
+    echo "SET PAGESIZE 0;
+              SET FEEDBACK OFF;
+              SET HEADING OFF;
+              SET ECHO OFF;
+              SET MARKUP HTML OFF;
+              SET COLSEP ',';
+              SPOOL /tmp/temp_file.sql;
+              SELECT contenido FROM SCRIPTS WHERE nombre = 'script_ejemplo2.sql';
+              SPOOL OFF;
+              EXIT;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@{{ oracle_host }}:{{ oracle_port }}/{{ oracle_database }}
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"

@@ -1,22 +1,47 @@
 ---
 - name: Ejecutar script SQL usando SQL*Plus
   shell: |
-    echo "SET PAGESIZE 0;
-          SET FEEDBACK OFF;
-          SET HEADING OFF;
-          SET ECHO OFF;
-          SET MARKUP HTML OFF;
-          SET COLSEP ',';
-          SELECT contenido FROM SCRIPTS WHERE nombre = 'script_ejemplo2.sql';
-          EXIT;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} | sed 's/;/;\n/g' > /tmp/temp_file.sql
+    echo "DECLARE
+        v_blob BLOB;
+        v_file UTL_FILE.FILE_TYPE;
+        v_buffer RAW(32767);
+        v_amount BINARY_INTEGER;
+        v_offset INTEGER := 1;
+        v_chunk_size INTEGER := 32767;
+        v_dest_file VARCHAR2(100) := '/home/oracle/prueba_descargado.sql'; -- Ruta de destino del archivo
+    BEGIN
+        -- Seleccionar el contenido del BLOB desde la tabla
+        SELECT Contenido INTO v_blob FROM ARCHIVOS WHERE ID = 2;
+
+        -- Abrir el archivo de destino para escritura
+        v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', 'prueba_descargado.sql', 'WB');
+
+        -- Escribir el contenido del BLOB en el archivo
+        LOOP
+            DBMS_LOB.READ(v_blob, v_chunk_size, v_offset, v_buffer);
+            v_amount := LENGTH(v_buffer);
+            EXIT WHEN v_amount = 0;
+            UTL_FILE.PUT_RAW(v_file, v_buffer, TRUE);
+            v_offset := v_offset + v_amount;
+        END LOOP;
+
+        -- Cerrar el archivo
+        UTL_FILE.FCLOSE(v_file);
+
+        DBMS_OUTPUT.PUT_LINE('Archivo descargado exitosamente.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al descargar el archivo: ' || SQLERRM);
+            IF UTL_FILE.IS_OPEN(v_file) THEN
+                UTL_FILE.FCLOSE(v_file);
+            END IF;
+    END;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
+
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"
     PATH: "{{ path_bin }}"
   register: sqlplus_output
-
-- name: Dividir el archivo SQL
-  shell: "awk '{gsub(/SET PAGES 50/, \"&\\n\")} {gsub(/SELECT USERNAME FROM ALL_USERS;/, \"&\\n\")} {gsub(/EXIT/, \"&\\n\")} 1' temp_file.sql > scpruebas.sql"
   
 - name: Mostrar salida de SQL*Plus
   debug:

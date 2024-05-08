@@ -19,7 +19,7 @@
                   EXIT WHEN v_amount = 0;
                   UTL_FILE.PUT_RAW(v_file, v_buffer, TRUE);
                   v_offset := v_offset + v_amount;
-              END LOOP
+              END LOOP;
               UTL_FILE.FCLOSE(v_file);
               DBMS_OUTPUT.PUT_LINE('Archivo descargado exitosamente.');
           EXCEPTION

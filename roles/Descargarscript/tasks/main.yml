@@ -8,7 +8,7 @@
         v_amount BINARY_INTEGER;
         v_offset INTEGER := 1;
         v_chunk_size INTEGER := 32767;
-        v_dest_file VARCHAR2(100) := '/tmp/prueba_descargado.sql'; -- Ruta de destino del archivo
+        v_dest_file VARCHAR2(100) := '/home/oracle/prueba_descargado.sql'; -- Ruta de destino del archivo
     BEGIN
         -- Seleccionar el contenido del BLOB desde la tabla
         SELECT Contenido INTO v_blob FROM ARCHIVOS WHERE ID = 2;
@@ -36,7 +36,6 @@
                 UTL_FILE.FCLOSE(v_file);
             END IF;
     END;" | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
-
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"

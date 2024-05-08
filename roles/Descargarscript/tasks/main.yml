@@ -32,7 +32,7 @@
                 UTL_FILE.FCLOSE(v_file);
             END IF;
     END;
-    " | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
+    " | sqlplus  {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"

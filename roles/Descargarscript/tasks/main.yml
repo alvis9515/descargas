@@ -10,11 +10,8 @@
         v_chunk_size INTEGER := 32767;
         v_dest_file VARCHAR2(100) := '/home/oracle/prueba_descargado.sql'; -- Ruta de destino del archivo
     BEGIN
-        -- Seleccionar el contenido del BLOB desde la tabla
         SELECT Contenido INTO v_blob FROM ARCHIVOS WHERE ID = 2
-        -- Abrir el archivo de destino para escritura
-        v_file := UTL_FILE.FOPEN('/home/oracle/', 'prueba_descargado.sql', 'WB')
-        -- Escribir el contenido del BLOB en el archivo
+        v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', 'prueba_descargado.sql', 'WB')
         LOOP
             DBMS_LOB.READ(v_blob, v_chunk_size, v_offset, v_buffer);
             v_amount := LENGTH(v_buffer);
@@ -22,7 +19,6 @@
             UTL_FILE.PUT_RAW(v_file, v_buffer, TRUE);
             v_offset := v_offset + v_amount;
         END LOOP
-        -- Cerrar el archivo
         UTL_FILE.FCLOSE(v_file)
         DBMS_OUTPUT.PUT_LINE('Archivo descargado exitosamente.');
     EXCEPTION

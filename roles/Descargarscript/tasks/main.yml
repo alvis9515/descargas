@@ -13,7 +13,7 @@
         -- Seleccionar el contenido del BLOB desde la tabla
         SELECT Contenido INTO v_blob FROM ARCHIVOS WHERE ID = 2
         -- Abrir el archivo de destino para escritura
-        v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', 'prueba_descargado.sql', 'WB')
+        v_file := UTL_FILE.FOPEN('/home/oracle/', 'prueba_descargado.sql', 'WB')
         -- Escribir el contenido del BLOB en el archivo
         LOOP
             DBMS_LOB.READ(v_blob, v_chunk_size, v_offset, v_buffer);

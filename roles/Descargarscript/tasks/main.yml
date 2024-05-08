@@ -29,11 +29,12 @@
             END IF;
     END;
     " | sqlplus  {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
+  register: result
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"
     PATH: "{{ path_bin }}"
-  register: result
+
 
 
 

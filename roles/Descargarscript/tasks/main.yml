@@ -33,7 +33,7 @@
             END IF;
     END;
     " | sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
-      register: result
+    register: result
 
-    - debug:
-        msg: "{{ result.stdout }}"
+- debug:
+    msg: "{{ result.stdout }}"

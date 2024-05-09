@@ -6,7 +6,7 @@ DECLARE
     v_offset INTEGER := 1;
     v_chunk_size INTEGER := 32767;
     v_dest_file VARCHAR2(100) := '{{ v_dest_file }}'; -- Ruta de destino del archivo
-    v_id NUMBER := {{ v_id }}; -- ID para la consulta
+
 BEGIN
     "{{ query_sql }}
     v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', '"{{final}}"', 'WB');

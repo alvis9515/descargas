@@ -1,0 +1,5 @@
+---
+- name: Crear archivo de script SQL
+  template:
+    src: script_template.sql.j2  # Archivo de plantilla con variables
+    dest: "{{ destino }}"  # Ruta de destino del archivo generado

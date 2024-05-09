@@ -1,16 +1,11 @@
 ---
-- name: Crear archivo de script SQL
-  template:
-    src: script_template.sql.j2  # Archivo de plantilla con variables
-    dest: "{{ destino }}"  # Ruta de destino del archivo generado
-
 - name: Ejecutar script SQL usando SQL*Plus
-  shell: sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} @{{ destinod }}
+  shell: $ORACLE_HOME/bin/sqlplus -S {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} @{{ destinod }}
   environment: 
     ORACLE_HOME: "{{ variable_home }}"
     LD_LIBRARY_PATH: "{{ ld_path }}"
     PATH: "{{ path_bin }}"
-    register: sqlplus_output
+  register: sqlplus_output
 
 - name: Mostrar salida de SQL*Plus
   debug:

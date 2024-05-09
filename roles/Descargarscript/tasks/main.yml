@@ -1,36 +1,15 @@
 ---
+- name: Crear archivo de script SQL
+  template:
+    src: script_template.sql.j2  # Archivo de plantilla con variables
+    dest: /home/oracle/descarga.sql  # Ruta de destino del archivo generado
+  vars:
+    v_dest_file: "/home/oracle/prueba_descargado.sql"  # Definir la ruta de destino
+    v_id: 2  # Definir el ID para la consulta
+
 - name: Ejecutar script SQL usando SQL*Plus
   shell: |
-    echo "DECLARE
-              v_blob BLOB;
-              v_file UTL_FILE.FILE_TYPE;
-              v_buffer RAW(32767);
-              v_amount BINARY_INTEGER;
-              v_offset INTEGER := 1;
-              v_chunk_size INTEGER := 32767;
-              v_dest_file VARCHAR2(100) := '/home/oracle/prueba_descargado.sql'; -- Ruta de destino del archivo
-          BEGIN
-              SELECT Contenido INTO v_blob FROM ARCHIVOS WHERE ID = 2;
-              v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', 'prueba_descargado.sql', 'WB');
-            
-              LOOP
-                  DBMS_LOB.READ(v_blob, v_chunk_size, v_offset, v_buffer);
-                  v_amount := LENGTH(v_buffer);
-                  EXIT WHEN v_amount = 0;
-                  UTL_FILE.PUT_RAW(v_file, v_buffer, TRUE);
-                  v_offset := v_offset + v_amount;
-              END LOOP;
-              UTL_FILE.FCLOSE(v_file);
-              DBMS_OUTPUT.PUT_LINE('Archivo descargado exitosamente.');
-          EXCEPTION
-              WHEN OTHERS THEN
-                  DBMS_OUTPUT.PUT_LINE('Error al descargar el archivo: ' || SQLERRM);
-                  IF UTL_FILE.IS_OPEN(v_file) THEN
-                      UTL_FILE.FCLOSE(v_file);
-                  END IF;
-          END;
-          /
-    " | sqlplus -S  {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }}
+    sqlplus -S  {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} @/home/oracle/descarga.sql
   register: result
   environment: 
     ORACLE_HOME: "{{ variable_home }}"

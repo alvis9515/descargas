@@ -8,8 +8,8 @@ DECLARE
     v_dest_file VARCHAR2(100) := '{{ v_dest_file }}'; -- Ruta de destino del archivo
 
 BEGIN
-    "{{ query_sql }}
-    v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', '"{{final}}"', 'WB');
+    {{ query_sql }}
+    v_file := UTL_FILE.FOPEN('HOME_DIRECTORY', '{{final}}', 'WB');
             
     LOOP
         DBMS_LOB.READ(v_blob, v_chunk_size, v_offset, v_buffer);

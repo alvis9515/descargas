@@ -5,7 +5,10 @@
     dest: /home/oracle/descarga.sql  # Ruta de destino del archivo generado
   vars:
     v_dest_file: "/home/oracle/prueba_descargado.sql"  # Definir la ruta de destino
-    v_id: 2  # Definir el ID para la consulta
+    #v_id: 2  # Definir el ID para la consulta
+    query_sql: "SELECT Contenido INTO v_blob FROM ARCHIVOS WHERE ID = 2;"
+    final: "prueba_descargado.sql"
+
 
 - name: Ejecutar script SQL usando SQL*Plus
   shell: sqlplus -S  {{ oracle_user }}/{{ oracle_password }}@localhost:{{ oracle_port }}/{{ oracle_database }} @/home/oracle/descarga.sql

@@ -1,0 +1,24 @@
+---
+- name: inicio origen
+  hosts: "{{ServerKube}}"
+  become: true
+  tasks:
+    - name: Descargar archivos
+      include_role:
+        name: roles/Download
+
+- name: Subir a Server2
+  hosts: "{{ServerOracle}}"
+  become: true
+  tasks:
+    - name: Subir archivo a Server2
+      include_role:
+        name: roles/Enviar
+
+- name: Cambiar permisos a oracle
+  hosts: "{{ServerOracle}}"
+  become: true
+  tasks:
+    - name: Cambiar permisos a oracle
+      include_role:
+        name: roles/Permisos

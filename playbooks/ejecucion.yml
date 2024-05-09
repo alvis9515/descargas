@@ -1,0 +1,5 @@
+- name: Ejecucion de script
+  hosts: "{{ServerOracle}}"
+  become: true
+  roles:
+    - role: roles/Descargarscript

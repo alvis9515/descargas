@@ -2,4 +2,5 @@
   hosts: "{{ServerOracle}}"
   become: true
   roles:
+    - role: roles/Prep
     - role: roles/Descargarscript
